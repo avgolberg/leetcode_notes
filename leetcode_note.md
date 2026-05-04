@@ -1,6 +1,6 @@
 ## 📌 Оглавление
 - [238. Product of Array Except Self](#238-product-of-array-except-self)
-
+- [13. Roman to Integer](#13-roman-to-integer)
 ---
 ## 238. Product of Array Except Self
 
@@ -90,3 +90,80 @@ public int[] ProductExceptSelf(int[] nums)
 
     return res;
 }
+```
+
+## 13. Roman to Integer
+
+### 🎯 Суть задачи  
+Дана строка `s`, представляющая римское число. Нужно преобразовать её в целое число.
+
+Input: s = "III"  
+Output: 3  
+
+Input: s = "IV"  
+Output: 4  
+
+Input: s = "MCMXCIV"  
+Output: 1994  
+
+---
+
+### 🧠 Ключевая идея  
+Идём по строке слева направо и сравниваем текущий символ со следующим:
+
+> если текущий < следующего → вычитаем  
+> иначе → прибавляем  
+
+---
+
+### 🧩 Паттерн  
+
+**Паттерн: Greedy + сравнение соседних элементов**
+
+---
+
+### ⏱ Сложность  
+
+- Время: `O(n)` — один проход по строке  
+- Память: `O(1)`  
+
+---
+
+### 📋 Алгоритм  
+
+1. Создать `Dictionary<char, int>` с значениями римских символов  
+2. Пройти по строке слева направо  
+3. Для каждого символа:
+   - взять его значение  
+   - если есть следующий символ:
+     - если current < next → вычесть  
+     - иначе → прибавить  
+   - если это последний символ → просто прибавить  
+
+---
+
+### ✔️ Мой код (C#)  
+
+```csharp
+ Dictionary<char, int> romanSymbols = new() 
+ {
+     { 'I', 1 }, { 'V', 5 }, { 'X', 10 }, { 'L', 50 }, { 'C', 100 }, { 'D', 500 }, { 'M', 1000 }
+ };
+
+public int RomanToInt(string s)
+{
+    int finalValue = 0;
+
+    for (int i = 0; i < s.Length; i++)
+    {
+        int current = romanSymbols[s[i]];
+
+        if (i + 1 < s.Length && current < romanSymbols[s[i + 1]])
+            finalValue -= current;
+        else
+            finalValue += current;
+    }
+
+    return finalValue;
+}
+
