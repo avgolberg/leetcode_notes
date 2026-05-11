@@ -1,6 +1,8 @@
 ## 📌 Оглавление
 - [238. Product of Array Except Self](#238-product-of-array-except-self)
 - [13. Roman to Integer](#13-roman-to-integer)
+- [151. Reverse Words in a String](#151-reverse-words-in-a-string)
+
 ---
 ## 238. Product of Array Except Self
 
@@ -166,4 +168,125 @@ public int RomanToInt(string s)
 
     return finalValue;
 }
+```
 
+## 151. Reverse Words in a String
+
+### 🎯 Суть задачи  
+Дана строка `s`. Нужно развернуть порядок слов, удалить лишние пробелы, оставить между словами только один пробел.
+
+Input: s = `"  hello   world  "`  
+Output: `"world hello"`
+
+---
+
+### 🧠 Ключевая идея  
+
+1. Использовать встроенные string methods:
+   - разбить строку на слова + убрать пустые элементы, развернуть, соединить обратно.
+
+2. Алгоритмический подход:
+   - идти по строке справа налево, вручную находить слова, добавлять их в результат в нужном порядке.
+
+---
+
+### 🧩 Паттерн  
+
+**Паттерн: String Parsing / Two Pointers**
+
+Используется, когда:
+- нужно вручную обрабатывать строку,
+- пропускать символы,
+- выделять слова/токены,
+- контролировать пробелы или разделители.
+
+---
+
+# Вариант 1 — String Methods
+
+### 🧠 Идея  
+
+Используем встроенные методы C#:
+- `Split` с параметром `RemoveEmptyEntries`
+- `Reverse`
+- `Join`
+
+---
+
+### ⏱ Сложность  
+
+- Время: `O(n)`  
+- Память: `O(n)`  
+  (создаются массив слов и reversed sequence)
+
+---
+
+### ✔️ Мой код (C#)
+
+```csharp
+return string.Join(' ', s.Split(' ', StringSplitOptions.RemoveEmptyEntries).Reverse());
+```
+
+# Вариант 2 — Manual Parsing
+
+### 🧠 Идея  
+
+Идём по строке справа налево:
+- Пропускаем пробелы, находим конец слова
+- Идём влево до пробела, находим начало слова
+- Добавляем пробел между словами, но не перед первым
+- Добавляем слово в StringBuilder
+- Повторяем
+  
+---
+
+### ⏱ Сложность  
+
+- Время: `O(n)`  
+- Память: `O(n)`  
+
+---
+
+### ✔️ Мой код (C#)
+
+```csharp
+ public static string ReverseWords(string s)
+ {
+     StringBuilder sb = new();
+
+     int i = s.Length - 1;
+     while (i >= 0)
+     {
+         //пропускаем пробелы справа
+         while (i >= 0 && s[i] == ' ')
+         {
+             i--;
+         }
+
+         //запоминаем конец слова
+         int endIndex = i;
+
+         //ищем начало слова
+         while (i >= 0 && s[i] != ' ')
+         {
+             i--;
+         }
+
+         int startIndex = i + 1;
+
+         //добавляем пробел между словами, но не перед первым
+         if (sb.Length > 0)
+         {
+             sb.Append(' ');
+         }
+
+         // добавляем найденное слово
+         for (int k = startIndex; k <= endIndex; k++)
+         {
+             sb.Append(s[k]);
+         }
+     }
+
+     return sb.ToString();
+ }
+```
