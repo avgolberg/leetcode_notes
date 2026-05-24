@@ -2,7 +2,7 @@
 - [238. Product of Array Except Self](#238-product-of-array-except-self)
 - [13. Roman to Integer](#13-roman-to-integer)
 - [151. Reverse Words in a String](#151-reverse-words-in-a-string)
-
+- [134. Gas Station](#134-gas-station)
 ---
 ## 238. Product of Array Except Self
 
@@ -289,4 +289,90 @@ return string.Join(' ', s.Split(' ', StringSplitOptions.RemoveEmptyEntries).Reve
 
      return sb.ToString();
  }
+```
+
+# 134. Gas Station
+
+### 🎯 Суть задачи  
+Есть круг из заправок.
+
+- `gas[i]` — сколько бензина можно получить на станции `i`
+- `cost[i]` — сколько бензина нужно, чтобы доехать из станции `i` до следующей
+
+Нужно найти индекс станции, с которой можно проехать полный круг.  
+Если такой станции нет — вернуть `-1`.
+
+Input:  
+gas = `[1,2,3,4,5]`  
+cost = `[3,4,5,1,2]`
+
+Output:  
+`3`
+<img width="1693" height="929" alt="ChatGPT Image 24 мая 2026 г , 09_02_32" src="https://github.com/user-attachments/assets/3f3bc7cf-6a95-43af-8190-59e69b94a48d" />
+
+---
+
+## 🧠 Ключевая идея  
+
+На каждой станции: сначала заправляемся, потом тратим бензин на дорогу до следующей станции.
+
+```text
+tank = tank + gas[i] - cost[i]
+```
+---
+
+## 🧩 Паттерн  
+
+**Паттерн: Greedy**
+
+Если при движении от текущего `start` бак стал отрицательным, значит:
+- текущий старт невозможен,
+- и все станции между `start` и текущей тоже невозможны.
+---
+
+## 🧠 Идея  
+
+Вместо проверки каждого старта отдельно:
+
+- идём по массиву один раз,
+- поддерживаем текущий баланс бензина (`tank`),
+- если бензина не хватило:
+  - текущий старт невозможен,
+  - все станции между стартом и текущей тоже невозможны,
+  - начинаем с новой станции.
+- `total` отвечает на вопрос "хватает ли бензина вообще на весь круг?"
+---
+
+## ⏱ Сложность  
+
+- Время: `O(n)`  
+- Память: `O(1)`
+
+---
+
+## ✔️ Мой код (C#)
+
+```csharp
+public int CanCompleteCircuit(int[] gas, int[] cost)
+{
+    int total = 0;
+    int tank = 0;
+    int start = 0;
+
+    for (int i = 0; i < gas.Length; i++)
+    {
+        int diff = gas[i] - cost[i];
+
+        total += diff;
+        tank += diff;
+
+        if (tank < 0)
+        {
+            start = i + 1;
+            tank = 0;
+        }
+    }
+
+    return total >= 0 ? start : -1;
+}
 ```
