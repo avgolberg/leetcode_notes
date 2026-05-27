@@ -1,10 +1,12 @@
 ## 📌 Оглавление
-- [238. Product of Array Except Self](#238-product-of-array-except-self)
-- [13. Roman to Integer](#13-roman-to-integer)
-- [151. Reverse Words in a String](#151-reverse-words-in-a-string)
-- [134. Gas Station](#134-gas-station)
+- [238. Product of Array Except Self [Medium]](#238-product-of-array-except-self-medium)
+- [13. Roman to Integer [Easy]](#13-roman-to-integer-easy)
+- [151. Reverse Words in a String [Medium]](#151-reverse-words-in-a-string-medium)
+- [134. Gas Station [Medium]](#134-gas-station-medium)
+- [14. Longest Common Prefix [Easy]](#14-longest-common-prefix-easy)
+- [58. Length of Last Word [Easy]](#58-length-of-last-word-easy)
 ---
-## 238. Product of Array Except Self
+## 238. Product of Array Except Self [Medium]
 
 ### 🎯 Суть задачи  
 Дан массив `nums`. Нужно для каждого `i` вернуть произведение **всех** элементов массива, кроме `nums[i]`. Нельзя использовать деление, нужно `O(n)` по времени. 
@@ -94,7 +96,7 @@ public int[] ProductExceptSelf(int[] nums)
 }
 ```
 
-## 13. Roman to Integer
+## 13. Roman to Integer [Easy]
 
 ### 🎯 Суть задачи  
 Дана строка `s`, представляющая римское число. Нужно преобразовать её в целое число.
@@ -170,7 +172,7 @@ public int RomanToInt(string s)
 }
 ```
 
-## 151. Reverse Words in a String
+## 151. Reverse Words in a String [Medium]
 
 ### 🎯 Суть задачи  
 Дана строка `s`. Нужно развернуть порядок слов, удалить лишние пробелы, оставить между словами только один пробел.
@@ -291,7 +293,7 @@ return string.Join(' ', s.Split(' ', StringSplitOptions.RemoveEmptyEntries).Reve
  }
 ```
 
-# 134. Gas Station
+## 134. Gas Station [Medium]
 
 ### 🎯 Суть задачи  
 Есть круг из заправок.
@@ -312,7 +314,7 @@ Output:
 
 ---
 
-## 🧠 Ключевая идея  
+### 🧠 Ключевая идея  
 
 На каждой станции: сначала заправляемся, потом тратим бензин на дорогу до следующей станции.
 
@@ -321,7 +323,7 @@ tank = tank + gas[i] - cost[i]
 ```
 ---
 
-## 🧩 Паттерн  
+### 🧩 Паттерн  
 
 **Паттерн: Greedy**
 
@@ -330,7 +332,7 @@ tank = tank + gas[i] - cost[i]
 - и все станции между `start` и текущей тоже невозможны.
 ---
 
-## 🧠 Идея  
+### 🧠 Идея  
 
 Вместо проверки каждого старта отдельно:
 
@@ -343,14 +345,14 @@ tank = tank + gas[i] - cost[i]
 - `total` отвечает на вопрос "хватает ли бензина вообще на весь круг?"
 ---
 
-## ⏱ Сложность  
+### ⏱ Сложность  
 
 - Время: `O(n)`  
 - Память: `O(1)`
 
 ---
 
-## ✔️ Мой код (C#)
+### ✔️ Мой код (C#)
 
 ```csharp
 public int CanCompleteCircuit(int[] gas, int[] cost)
@@ -376,3 +378,203 @@ public int CanCompleteCircuit(int[] gas, int[] cost)
     return total >= 0 ? start : -1;
 }
 ```
+## 14. Longest Common Prefix [Easy]
+
+### 🎯 Суть задачи  
+
+Нужно найти самый длинный общий префикс для массива строк.
+
+Если общего префикса нет — вернуть пустую строку.
+
+Input:
+
+```text
+["flower","flow","flight"]
+```
+
+Output:
+
+```text
+"fl"
+```
+
+---
+
+### 🧠 Ключевая идея  
+
+Берём первое слово как эталон и проверяем его буквы по индексам.
+
+Как только:
+- строка закончилась
+ИЛИ
+- буква не совпала
+
+→ общий префикс закончился.
+
+---
+
+### 🧩 Паттерн  
+
+**Паттерн: Vertical Scanning**
+
+---
+
+### ⏱ Сложность  
+
+- Время: `O(n * m)`
+  - `n` — количество строк
+  - `m` — длина общего префикса / самой короткой строки
+
+- Память: `O(m)`
+  - `StringBuilder` для результата
+
+---
+
+### 📋 Алгоритм  
+
+1. Берём первое слово, проходим по каждой букве
+2. Для каждой буквы:
+   - проверяем все остальные строки
+3. Если:
+   - буквы с индексом `i` не существует (строка закончилась)
+   - или буква существует, но не совпадает
+   → возвращаем текущий результат
+
+```csharp
+if (i >= strs[j].Length || strs[j][i] != letter)
+```
+
+4. Если все строки совпали:
+   - добавляем букву в префикс
+
+---
+
+### ✔️ Мой код (C#)
+
+```csharp
+public string LongestCommonPrefix(string[] strs)
+{
+    StringBuilder sb = new();
+    string firstWord = strs[0];
+
+    for (int i = 0; i < firstWord.Length; i++)
+    {
+        char letter = firstWord[i];
+
+        for (int j = 1; j < strs.Length; j++)
+        {
+            if (i >= strs[j].Length || strs[j][i] != letter)
+            {
+                return sb.ToString();
+            }
+        }
+
+        sb.Append(letter);
+    }
+
+    return sb.ToString();
+}
+```
+---
+
+## 58. Length of Last Word [Easy]
+
+### 🎯 Суть задачи
+
+Нужно вернуть длину последнего слова в строке.
+
+Input:
+
+```text
+"Hello World"
+```
+
+Output:
+
+```text
+5
+```
+
+---
+
+### 🧠 Ключевая идея  
+
+1. ⭐️ Алгоритмически пройти строку с конца
+2. Использовать string methods (`Split`)
+   
+---
+
+### 🧩 Паттерн  
+
+**Паттерн: Two Pointers / String Traversal**
+
+Идём по строке с конца:
+- пропускаем пробелы,
+- считаем буквы последнего слова.
+
+---
+
+## Вариант 1 — Алгоритмический
+
+### 🧠 Идея  
+
+Идём с конца строки, используем `while` (удобен, когда заранее неизвестно количество шагов):
+
+1. Пропускаем пробелы справа
+2. Считаем буквы последнего слова
+
+---
+
+### ⏱ Сложность  
+
+- Время: `O(n)` в худшем случае
+- Память: `O(1)`
+
+---
+
+### ✔️ Мой код (C#)
+
+```csharp
+public int LengthOfLastWord(string s)
+{
+    int i = s.Length - 1;
+    int count = 0;
+
+    // пропускаем пробелы справа
+    while (i >= 0 && s[i] == ' ')
+    {
+        i--;
+    }
+
+    // считаем буквы последнего слова
+    while (i >= 0 && s[i] != ' ')
+    {
+        count++;
+        i--;
+    }
+
+    return count;
+}
+```
+
+---
+
+## Вариант 2 — String Methods
+
+### ⏱ Сложность  
+
+- Время: `O(n)`
+- Память: `O(n)`
+
+- `Split` проходит по всей строке, находит разделители, создаёт массив строк, создаёт отдельную строку для каждого слова. Даже если нужен только последний элемент.
+
+---
+
+### ✔️ Мой код (C#)
+
+```csharp
+var words = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+return words[words.Length - 1].Length;
+```
+
+---
