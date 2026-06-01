@@ -5,6 +5,7 @@
 - [134. Gas Station [Medium]](#134-gas-station-medium)
 - [14. Longest Common Prefix [Easy]](#14-longest-common-prefix-easy)
 - [58. Length of Last Word [Easy]](#58-length-of-last-word-easy)
+- [125. Valid Palindrome [Easy]](#125-valid-palindrome-easy)
 ---
 ## 238. Product of Array Except Self [Medium]
 
@@ -575,6 +576,79 @@ public int LengthOfLastWord(string s)
 ```csharp
 var words = s.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 return words[words.Length - 1].Length;
+```
+
+---
+
+## 125. Valid Palindrome [Easy]
+
+### 🎯 Суть задачи  
+
+Нужно проверить, является ли строка палиндромом (игнорируя пробелы, символы, регистр букв).
+
+Input:
+
+```text
+"A man, a plan, a canal: Panama"
+```
+
+Output:
+
+```text
+true
+```
+
+---
+
+### 🧠 Ключевая идея  
+
+Очищаем строку (оставить только буквы и цифры, привести всё к одному регистру), проверяем симметричность двумя указателями.
+
+---
+
+### 🧩 Паттерн  
+
+**Паттерн: String Filtering + Two Pointers**
+
+---
+
+## ⏱ Сложность  
+
+- Время: `O(n)`
+- Память: `O(n)` (можно `O(1)` память, если не создавать новую строку)
+
+---
+
+### ✔️ Мой код (C#)
+
+```csharp
+public bool IsPalindrome(string s)
+{
+    StringBuilder sb = new();
+    foreach (char c in s)
+    {
+        if (char.IsLetterOrDigit(c))
+        {
+            sb.Append(char.ToLowerInvariant(c));
+        }
+    }
+
+    int left = 0;
+    int right = sb.Length - 1;
+
+    while (left < right)
+    {
+        if (sb[left] != sb[right])
+        {
+            return false;
+        }
+
+        left++;
+        right--;
+    }
+
+    return true;
+}
 ```
 
 ---
