@@ -6,6 +6,7 @@
 - [14. Longest Common Prefix [Easy]](#14-longest-common-prefix-easy)
 - [58. Length of Last Word [Easy]](#58-length-of-last-word-easy)
 - [125. Valid Palindrome [Easy]](#125-valid-palindrome-easy)
+- [11. Container With Most Water [Medium]](#11-container-with-most-water-medium)
 ---
 ## 238. Product of Array Except Self [Medium]
 
@@ -648,6 +649,82 @@ public bool IsPalindrome(string s)
     }
 
     return true;
+}
+```
+
+---
+## 🧠 11. Container With Most Water [Medium]
+
+### 🎯 Суть задачи
+
+Дан массив высот. Каждая высота представляет вертикальную линию. 
+
+Нужно выбрать две линии так, чтобы контейнер между ними содержал максимальное количество воды.
+
+<img width="601" height="506" alt="image" src="https://github.com/user-attachments/assets/44d2cf35-a393-432b-9637-130faa77408e" />
+
+---
+
+### 🧩 Паттерн
+
+**Two Pointers**
+
+### 🧠 Ключевая идея
+
+Указатели начинаются на концах массива.
+
+1. Считаем площадь
+   ```text
+   min(height[left], height[right]) * (right - left)
+   ```
+2. Обновляем максимум
+3. Двигаем меньшую стенку (она ограничевает высоту контейнера) и пытаемся найти более высокую (ширина уменьшается).
+
+---
+
+### ⏱ Сложность
+
+- Время: O(n)
+- Память: O(1)
+
+---
+
+### 📋 Алгоритм
+
+1. Поставить указатели на начало и конец массива
+2. Пока указатели не встретились:
+   - найти минимальную высоту
+   - посчитать площадь
+   - обновить максимум
+   - сдвинуть указатель с меньшей высотой
+3. Вернуть максимальную площадь
+
+---
+
+### ✔️ Мой код (C#)
+
+```csharp
+public int MaxArea(int[] height)
+{
+    int left = 0;
+    int right = height.Length - 1;
+
+    int result = 0;
+
+    while (left < right)
+    {
+        int minHeight = Math.Min(height[left], height[right]);
+        int area = minHeight * (right - left);
+
+        result = Math.Max(result, area);
+
+        if (height[left] < height[right])
+            left++;
+        else
+            right--;
+    }
+
+    return result;
 }
 ```
 
