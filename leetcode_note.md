@@ -7,6 +7,8 @@
 - [58. Length of Last Word [Easy]](#58-length-of-last-word-easy)
 - [125. Valid Palindrome [Easy]](#125-valid-palindrome-easy)
 - [11. Container With Most Water [Medium]](#11-container-with-most-water-medium)
+- [28. Find the Index of the First Occurrence in a String [Easy]](#28-find-the-index-of-the-first-occurrence-in-a-string-easy)
+- [392. Is Subsequence [Easy]](#392-is-subsequence-easy)
 ---
 ## 238. Product of Array Except Self [Medium]
 
@@ -653,7 +655,7 @@ public bool IsPalindrome(string s)
 ```
 
 ---
-## 🧠 11. Container With Most Water [Medium]
+## 11. Container With Most Water [Medium]
 
 ### 🎯 Суть задачи
 
@@ -729,3 +731,116 @@ public int MaxArea(int[] height)
 ```
 
 ---
+## 28. Find the Index of the First Occurrence in a String [Easy]
+
+### 🎯 Суть задачи
+
+Найти индекс первого вхождения строки needle в строку haystack.
+
+Если подстрока не найдена — вернуть -1.
+
+
+### 🧠 Ключевая идея
+
+Перебираем все возможные позиции начала подстроки и проверяем совпадение символов.
+
+Не проверяем позиции, где needle уже физически не поместится (последняя допустимая стартовая позиция тоже должна проверяться):
+```csharp
+i <= haystack.Length - needle.Length
+```
+
+Пропускаем неподходящие старты:
+```csharp
+if (haystack[i] != needle[0])
+    continue;
+```
+
+
+### 🧩 Паттерн
+
+Pattern Matching
+
+
+### ⏱ Сложность
+
+- Время: O(n * m)
+- Память: O(1)
+
+
+### ✔️ Мой код (C#)
+
+```csharp
+return haystack.IndexOf(needle);
+```
+
+```csharp
+public int StrStr(string haystack, string needle)
+{
+    for (int i = 0; i <= haystack.Length - needle.Length; i++)
+    {
+        if (haystack[i] != needle[0])
+            continue;
+
+        bool isMatch = true;
+
+        for (int j = 0; j < needle.Length; j++)
+        {
+            if (haystack[i + j] != needle[j])
+            {
+                isMatch = false;
+                break;
+            }
+        }
+
+        if (isMatch)
+            return i;
+    }
+
+    return -1;
+}
+```
+
+---
+
+## 392. Is Subsequence [Easy]
+
+### 🎯 Суть задачи
+
+Проверить, является ли строка s подпоследовательностью строки t (символы идут в правильном порядке, но между ними могут быть другие символы).
+
+### 🧩 Паттерн
+
+Two Pointers (бывают не только left/right)
+
+### 📋 Алгоритм
+
+1. Держим указатель в строке s.
+2. Идём по строке t.
+3. Если символ совпал — двигаем указатель в s.
+4. Когда дошли до конца s — вся подпоследовательность найдена.
+
+### ⏱ Сложность
+
+- Время: O(n)
+- Память: O(1)
+
+### ✔️ Мой код (C#)
+
+```csharp
+public bool IsSubsequence(string s, string t)
+{
+    int i = 0;
+
+    for (int j = 0; j < t.Length; j++)
+    {
+        if (i < s.Length && s[i] == t[j])
+        {
+            i++;
+        }
+    }
+
+    return i == s.Length;
+}
+```
+---
+
